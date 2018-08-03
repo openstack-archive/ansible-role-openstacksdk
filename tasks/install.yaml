@@ -1,0 +1,35 @@
+# Copyright 2015 Red Hat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+---
+- name: Define openstacksdk_build_depends.
+  set_fact:
+    openstacksdk_build_depends: "{{ __openstacksdk_build_depends | list }}"
+  when: openstacksdk_build_depends is not defined
+
+- name: Ensure build dependencies are installed.
+  become: yes
+  package:
+    name: "{{ openstacksdk_build_depends }}"
+    state: installed
+  when: openstacksdk_install_method == 'git' or openstacksdk_install_method == 'pip'
+
+- name: Define openstacksdk_pip_executable if needed.
+  set_fact:
+    openstacksdk_pip_executable: pip3
+  when:
+    - openstacksdk_install_method == 'git' or openstacksdk_install_method == 'pip'
+    - openstacksdk_pip_virtualenv_python is not defined
+    - openstacksdk_pip_executable is not defined
+
+- include: "install/{{ openstacksdk_install_method }}.yaml"

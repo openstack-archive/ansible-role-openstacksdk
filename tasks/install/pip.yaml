@@ -1,0 +1,23 @@
+# Copyright 2015 Red Hat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+---
+- name: Install openstacksdk using pip.
+  become: yes
+  pip:
+    executable: "{{ openstacksdk_pip_executable|default(omit) }}"
+    extra_args: "{{ openstacksdk_pip_extra_args|default(omit) }}"
+    name: "{{ openstacksdk_pip_name }}"
+    version: "{{ openstacksdk_pip_version|default(omit) }}"
+    virtualenv_python: "{{ openstacksdk_pip_virtualenv_python|default(omit) }}"
+    virtualenv: "{{ openstacksdk_pip_virtualenv|default(omit) }}"
