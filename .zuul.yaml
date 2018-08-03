@@ -1,0 +1,73 @@
+- job:
+    name: ansible-role-openstacksdk-base
+    pre-run: tests/playbooks/pre.yaml
+    run: tests/playbooks/run.yaml
+    roles:
+      - zuul: openstack/ansible-role-openstacksdk
+
+# Testing for nodepool_install_method: pip
+- job:
+    name: ansible-role-openstacksdk
+    parent: ansible-role-openstacksdk-base
+
+- job:
+    name: ansible-role-openstacksdk-fedora-latest
+    parent: ansible-role-openstacksdk
+    nodeset: fedora-latest
+
+- job:
+    name: ansible-role-openstacksdk-ubuntu-bionic
+    parent: ansible-role-openstacksdk
+    nodeset: ubuntu-bionic
+
+- job:
+    name: ansible-role-openstacksdk-ubuntu-xenial
+    parent: ansible-role-openstacksdk
+    nodeset: ubuntu-xenial
+
+# Testing for nodepool_install_method: git
+- job:
+    name: ansible-role-openstacksdk-src
+    parent: ansible-role-openstacksdk-base
+    required-projects:
+      - name: openstack/openstacksdk
+    vars:
+      openstacksdk_git_update: false
+      openstacksdk_install_method: git
+
+- job:
+    name: ansible-role-openstacksdk-src-fedora-latest
+    parent: ansible-role-openstacksdk-src
+    nodeset: fedora-latest
+
+- job:
+    name: ansible-role-openstacksdk-src-ubuntu-bionic
+    parent: ansible-role-openstacksdk-src
+    nodeset: ubuntu-bionic
+
+- job:
+    name: ansible-role-openstacksdk-src-ubuntu-xenial
+    parent: ansible-role-openstacksdk-src
+    nodeset: ubuntu-xenial
+
+- project:
+    templates:
+      - windmill-jobs-fedora-latest
+      - windmill-jobs-bionic
+      - windmill-jobs-xenial
+    check:
+      jobs:
+        - ansible-role-openstacksdk-fedora-latest
+        - ansible-role-openstacksdk-ubuntu-bionic
+        - ansible-role-openstacksdk-ubuntu-xenial
+        - ansible-role-openstacksdk-src-fedora-latest
+        - ansible-role-openstacksdk-src-ubuntu-bionic
+        - ansible-role-openstacksdk-src-ubuntu-xenial
+        - tox-linters
+    gate:
+      jobs:
+        - ansible-role-openstacksdk-fedora-latest
+        - ansible-role-openstacksdk-ubuntu-xenial
+        - ansible-role-openstacksdk-src-fedora-latest
+        - ansible-role-openstacksdk-src-ubuntu-xenial
+        - tox-linters
