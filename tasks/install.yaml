@@ -32,4 +32,4 @@
     - openstacksdk_pip_virtualenv_python is not defined
     - openstacksdk_pip_executable is not defined
 
-- include: "install/{{ openstacksdk_install_method }}.yaml"
+- include_tasks: "install/{{ openstacksdk_install_method }}.yaml"

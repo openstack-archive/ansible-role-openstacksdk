@@ -23,4 +23,4 @@
   set_fact:
     openstacksdk_pip_name: "file://{{ openstacksdk_git_dest }}"
 
-- include: pip.yaml
+- include_tasks: pip.yaml
