@@ -15,4 +15,7 @@
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yaml"
 
-- include: install.yaml
+- include: "{{ openstacksdk_task }}.yaml"
+  with_items: "{{ openstacksdk_task_manager }}"
+  loop_control:
+    loop_var: openstacksdk_task
