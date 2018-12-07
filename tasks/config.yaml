@@ -1,0 +1,32 @@
+# Copyright 2018 Red Hat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+---
+- name: Create required directories
+  become: true
+  become_user: "{{ openstacksdk_user_name }}"
+  file:
+    group: "{{ openstacksdk_user_group }}"
+    owner: "{{ openstacksdk_user_name }}"
+    path: "{{ openstacksdk_user_home }}/.config/openstack"
+    state: directory
+
+- name: Install openstacksdk clouds.yaml
+  become: true
+  template:
+    dest: "{{ openstacksdk_file_clouds_yaml_dest }}"
+    group: "{{ openstacksdk_file_clouds_yaml_group }}"
+    mode: "{{ openstacksdk_file_clouds_yaml_mode }}"
+    owner: "{{ openstacksdk_file_clouds_yaml_owner }}"
+    src: "{{ openstacksdk_file_clouds_yaml_src }}"
+  register: openstacksdk_file_clouds_yaml
