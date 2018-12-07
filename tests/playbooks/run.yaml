@@ -20,7 +20,7 @@
     - "{{ rolename }}"
 
   post_tasks:
-    - name: Register openstacksdk_git_dest_stat.
+    - name: Register openstacksdk_git_dest_stat
       stat:
         path: /home/zuul/src/git.openstack.org/openstack/openstacksdk
       register: openstacksdk_git_dest_stat
@@ -32,3 +32,19 @@
           - openstacksdk_git_dest_stat.stat.exists
           - openstacksdk_git_dest_stat.stat.isdir
       when: openstacksdk_install_method == 'git'
+
+    - name: Register openstacksdk_file_clouds_yaml
+      become: True
+      stat:
+        path: /root/.config/openstack/clouds.yaml
+      register: openstacksdk_file_clouds_yaml_stat
+
+    - name: Assert openstacksdk_file_clouds_yaml tests
+      become: True
+      assert:
+        that:
+          - openstacksdk_file_clouds_yaml_stat.stat.exists
+          - openstacksdk_file_clouds_yaml_stat.stat.isfile
+          - openstacksdk_file_clouds_yaml_stat.stat.pw_name == 'root'
+          - openstacksdk_file_clouds_yaml_stat.stat.gr_name == 'root'
+          - openstacksdk_file_clouds_yaml_stat.stat.mode == '0640'
