@@ -17,11 +17,11 @@
     openstacksdk_build_depends: "{{ __openstacksdk_build_depends | list }}"
   when: openstacksdk_build_depends is not defined
 
-- name: Ensure build dependencies are installed.
+- name: Ensure build dependencies are present.
   become: yes
   package:
     name: "{{ openstacksdk_build_depends }}"
-    state: installed
+    state: present
   when: openstacksdk_install_method == 'git' or openstacksdk_install_method == 'pip'
 
 - name: Define openstacksdk_pip_executable if needed.
