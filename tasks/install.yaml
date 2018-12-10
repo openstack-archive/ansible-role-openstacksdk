@@ -12,19 +12,19 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 ---
-- name: Define openstacksdk_build_depends.
+- name: Define openstacksdk_build_depends
   set_fact:
     openstacksdk_build_depends: "{{ __openstacksdk_build_depends | list }}"
   when: openstacksdk_build_depends is not defined
 
-- name: Ensure build dependencies are present.
+- name: Ensure build dependencies are present
   become: yes
   package:
     name: "{{ openstacksdk_build_depends }}"
     state: present
   when: openstacksdk_install_method == 'git' or openstacksdk_install_method == 'pip'
 
-- name: Define openstacksdk_pip_executable if needed.
+- name: Define openstacksdk_pip_executable if needed
   set_fact:
     openstacksdk_pip_executable: pip3
   when:

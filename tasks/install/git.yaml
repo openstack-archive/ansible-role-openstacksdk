@@ -12,14 +12,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 ---
-- name: Git clone openstacksdk.
+- name: Git clone openstacksdk
   git:
     dest: "{{ openstacksdk_git_dest }}"
     repo: "{{ openstacksdk_git_uri }}"
     update: "{{ openstacksdk_git_update|default(omit) }}"
     version: "{{ openstacksdk_git_version }}"
 
-- name: Set openstacksdk_pip_name to local git repo.
+- name: Set openstacksdk_pip_name to local git repo
   set_fact:
     openstacksdk_pip_name: "file://{{ openstacksdk_git_dest }}"
 
